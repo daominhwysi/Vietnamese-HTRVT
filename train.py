@@ -2,6 +2,7 @@ import torch
 import torch.utils.data
 import torch.backends.cudnn as cudnn
 from torch.utils.tensorboard import SummaryWriter
+from tqdm import tqdm
 
 import os
 import json
@@ -39,6 +40,15 @@ def main():
     writer = SummaryWriter(args.save_dir)
 
     model = HTR_VT.create_model(nb_cls=args.nb_cls, img_size=args.img_size[::-1])
+# After model creation and before model.train()
+    if args.pretrained_model is not None:
+        if os.path.isfile(args.pretrained_model):
+            logger.info(f"Loading pretrained model from {args.pretrained_model}")
+            checkpoint = torch.load(args.pretrained_model)
+            model.load_state_dict(checkpoint['model'])
+            logger.info(f"Loaded pretrained model: {args.pretrained_model}")
+        else:
+            logger.warning(f"Pretrained model not found at {args.pretrained_model}, training from scratch.")
 
     total_param = sum(p.numel() for p in model.parameters())
     logger.info('total_param is {}'.format(total_param))
@@ -75,7 +85,7 @@ def main():
 
     #### ---- train & eval ---- ####
 
-    for nb_iter in range(1, args.total_iter):
+    for nb_iter in tqdm(range(1, args.total_iter)):
 
         optimizer, current_lr = utils.update_lr_cos(nb_iter, args.warm_up_iter, args.total_iter, args.max_lr, optimizer)
 

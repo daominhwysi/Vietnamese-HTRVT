@@ -55,14 +55,12 @@ def get_args_parser():
     parser.add_argument('--sharpen-max-alpha', default=1, type=int)
     parser.add_argument('--sharpen-min-strength', default=0, type=int)
     parser.add_argument('--sharpen-max-strength', default=1, type=int)
-    parser.add_argument('--zoom-min-h', default=0.8, type=float)
-    parser.add_argument('--zoom-max-h', default=1, type=float)
-    parser.add_argument('--zoom-min-w', default=0.99, type=float)
-    parser.add_argument('--zoom-max-w', default=1, type=float)
+
     parser.add_argument('--proba', default=0.5, type=float)
 
     parser.add_argument('--ema-decay', default=0.9999, type=float, help='Exponential Moving Average (EMA) decay')
     parser.add_argument('--alpha', default=0, type=float, help='kld loss ratio')
+    parser.add_argument('--pretrained-model', type=str, default=None, help='path to pretrained model checkpoint')
 
     subparsers = parser.add_subparsers(title="dataset setting", dest="subcommand")
 
@@ -113,5 +111,19 @@ def get_args_parser():
     LAM.add_argument('--test-data-list', type=str, default='./data/LAM/test.ln',
                      help='test data list')
     LAM.add_argument('--nb-cls', default=90, type=int, help='nb of classes, IAM=79+1, READ2016=89+1')
+    Evnondb = subparsers.add_parser("Evnondb",
+                                description='Dataset parser for training on Evnondb',
+                                add_help=True,
+                                formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+                                help="Dataset parser for training on Evnondb")
 
+    Evnondb.add_argument('--train-data-list', type=str, default='./data/extendedvnondb/train.ln',
+                     help='train data list (gc file)(ln file)')
+    Evnondb.add_argument('--data-path', type=str, default='./data/extendedvnondb/lines/',
+                     help='train data list')
+    Evnondb.add_argument('--val-data-list', type=str, default='./data/extendedvnondb/val.ln',
+                     help='val data list')
+    Evnondb.add_argument('--test-data-list', type=str, default='./data/extendedvnondb/test.ln',
+                     help='test data list')
+    Evnondb.add_argument('--nb-cls', default=100, type=int, help='nb of classes, extendedvnondb=99+1, READ2016=89+1')
     return parser.parse_args()

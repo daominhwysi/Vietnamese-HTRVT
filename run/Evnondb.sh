@@ -1,7 +1,5 @@
-
-
-python3 test.py --exp-name Evnondb \
---max-lr 1e-3 \
+python3 train.py --exp-name Evnondb \
+--max-lr 1e-5 \
 --train-bs 96 \
 --val-bs 8 \
 --weight-decay 0.5 \
@@ -15,4 +13,5 @@ python3 test.py --exp-name Evnondb \
 --proba 0.5 \
 --alpha 1 \
 --total-iter 100000 \
+--pretrained-model output/Evnondb/best_CER.pth \
 Evnondb
