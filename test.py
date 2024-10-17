@@ -42,7 +42,7 @@ def main():
     logger.info('Loading test loader...')
     train_dataset = dataset.myLoadDS(args.train_data_list, args.data_path, args.img_size)
 
-    test_dataset = dataset.myLoadDS(args.test_data_list, args.data_path, args.img_size)
+    test_dataset = dataset.myLoadDS(args.test_data_list, args.data_path, args.img_size, ralph=train_dataset.ralph)
     test_loader = torch.utils.data.DataLoader(test_dataset,
                                               batch_size=args.val_bs,
                                               shuffle=False,
